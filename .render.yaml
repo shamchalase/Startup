@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: movie-ticket-app
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        fromSecret: true
+      - key: JWT_SECRET
+        fromSecret: true
+      - key: NODE_ENV
+        value: production

@@ -1,0 +1,19 @@
+name: Deploy to Render
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Render CLI
+        run: curl -L https://render.com/cli/install.sh | sh
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          render services update movie-ticket-app --clear-env
+          render services update movie-ticket-app --set-env MONGODB_URI=${{ secrets.MONGODB_URI }}
+          render services update movie-ticket-app --set-env JWT_SECRET=${{ secrets.JWT_SECRET }}
+          render deploy movie-ticket-app
